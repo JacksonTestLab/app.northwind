@@ -1,0 +1,23 @@
+{
+  "name": "app.northwind",
+  "version": "1.0.0",
+  "description": "![Status](https://img.shields.io/badge/Status-Em%20Desenvolvimento-yellow?style=flat-square)\r ![Playwright](https://img.shields.io/badge/Playwright-2.0-%231F1F1F.svg?style=flat-square&logo=playwright&logoColor=white)\r ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)\r ![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=node.js&logoColor=white)\r ![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-2088FF?style=flat-square&logo=github-actions&logoColor=white)\r ![Git](https://img.shields.io/badge/Git-F05032?style=flat-square&logo=git&logoColor=white)",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JacksonTestLab/app.northwind.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/JacksonTestLab/app.northwind/issues"
+  },
+  "homepage": "https://github.com/JacksonTestLab/app.northwind#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^26.6.2"
+  }
+}
