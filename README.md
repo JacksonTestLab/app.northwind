@@ -63,9 +63,9 @@ git clone git@github.com:JacksonTestLab/app.northwind.git
 cd app-northwind
 ```
 
-## 👨‍💻 Sobre o Projeto
+## 👨‍💻 Sobre o analista de QA
 
-Os testes deste projeto estão sendo realizados por **Jackson Mendes**, utilizando a plataforma **Northwind Test Platform** como ambiente para prática e validação de testes automatizados.
+Os testes deste projeto estão sendo realizados pelo analista de QA **Jackson Mendes**, utilizando a plataforma **Northwind Test Platform** como ambiente para prática e validação de testes automatizados.
 
 ### 🎓 Formação
 

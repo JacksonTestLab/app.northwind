@@ -1,0 +1,72 @@
+# =========================
+# Node.js
+# =========================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# =========================
+# Ambiente / Configuração
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# Logs
+# =========================
+logs/
+*.log
+
+# =========================
+# Build / Output
+# =========================
+dist/
+build/
+out/
+coverage/
+
+# =========================
+# Playwright
+# =========================
+test-results/
+playwright-report/
+blob-report/
+report/
+reports/
+
+# Screenshots / vídeos de falha
+*.png
+*.webm
+*.mp4
+
+# =========================
+# Cache
+# =========================
+.cache/
+.temp/
+tmp/
+
+# =========================
+# IDE / Editor
+# =========================
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# =========================
+# Sistema Operacional
+# =========================
+Thumbs.db
+
+# =========================
+# Arquivos de teste locais
+# =========================
+*.local
