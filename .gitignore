@@ -92,7 +92,6 @@ temp/
 /playwright/.cache/
 /playwright/.auth/
 
-
 __*
 
 # AllureReport
