@@ -1,7 +1,24 @@
 import { test, expect } from '@playwright/test';
 
-test('deve carregar a página inicial com sucesso', async ({ page }) => {
-  await page.goto('https://northwind-test-platform.vercel.app/');
-  await expect(page).toHaveTitle('QA Automation Shop');
-
+test('Acesso a pagina App Nortwind', async ({ page }) => {
+  await page.goto('https://northwind-test-platform.vercel.app/ ');
 });
+
+
+test('Acesso ao Dashboard de produto', async ({ page }) => {
+  await page.goto('https://northwind-test-platform.vercel.app/');
+  await page.getByText('Plataforma de Testes').click();  
+  await page.getByTestId('email-input').click();
+  await page.getByTestId('email-input').fill('admin@qatest.com');
+  await page.getByTestId('password-input').click();
+  await page.getByTestId('password-input').fill('Teste@123');
+  await page.getByTestId('login-button').click();
+  await expect(page.getByRole('heading')).toContainText('QA Automation Shop');
+});
+
+/*
+getByRole
+getByLabel / getByText / getByPlaceholder
+getByTestId
+CSS / XPath
+*/
