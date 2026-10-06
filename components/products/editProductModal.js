@@ -15,8 +15,6 @@ class EditProductModal {
     // Heading do modal (valida abertura)
     this.modalHeading = page.getByRole('heading', { name: 'Editar Produto' });
 
-    // Mensagens de erro
-    this.errorName = page.getByTestId('error-name');
   }
 
   // Métodos de preenchimento
@@ -49,14 +47,8 @@ class EditProductModal {
     await this.cancelButton.click();
   }
 
-  // Acessor de erro por campo
-  getError(field) {
-    switch (field) {
-      case 'name':
-        return this.errorName;
-      default:
-        throw new Error(`Campo de erro desconhecido: ${field}`);
-    }
+  getError(message) {
+    return this.page.getByText(message, { exact: true });
   }
 }
 

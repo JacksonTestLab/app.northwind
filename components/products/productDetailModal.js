@@ -3,9 +3,15 @@ class ProductDetailModal {
     this.page = page;
 
     this.heading = page.getByRole("heading", { name: "Detalhes do Produto" });
-    this.closeButton = page.getByRole("button", { name: "OK, entendi!" });
-    this.cancelButton = page.getByRole("button", { name: "Cancelar" });
-    this.printButton = page.getByRole("button", { name: "Imprimir (PDF/PNG)" });
+    this.closeButton = page.getByRole("button", {
+      name: "Fechar",
+      exact: true,
+    });
+    this.cancelButton = this.heading.locator("xpath=..").getByRole("button");
+    this.printButton = page.getByRole("button", {
+      name: "Imprimir",
+      exact: true,
+    });
 
     this.fieldId = page.getByText("ID:");
     this.fieldSku = page.getByText("SKU:");

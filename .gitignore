@@ -1,175 +1,69 @@
-# ==============================
-# Node.js
-# ==============================
-
-# Dependências
+# Dependencies
 node_modules/
 
-# Logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-
-# Arquivos de ambiente
-.env
-.env.*
-!.env.example
-
-# Build / Distribuição
-dist/
-build/
-coverage/
-
-# Cache
-.npm/
-.cache/
-.parcel-cache/
-
-# ==============================
-# Playwright
-# ==============================
-
-# Relatórios e resultados de testes
-playwright-report/
-test-results/
-blob-report/
-
-# Vídeos, screenshots e traces
-*.zip
-*.trace
-*.har
-
-# Diretórios padrão de output (caso configurados)
-artifacts/
-reports/
-
-# ==============================
-# IDE / Editores
-# ==============================
-
-# VS Code
-.vscode/
-!.vscode/extensions.json
-
-# JetBrains
-.idea/
-
-# Outros
-*.swp
-*.swo
-*~
-
-# ==============================
-# Sistema Operacional
-# ==============================
-
-# macOS
-.DS_Store
-
-# Windows
-Thumbs.db
-ehthumbs.db
-Desktop.ini
-
-# ==============================
-# CI/CD (caso gere arquivos locais)
-# ==============================
-
-# Logs locais de CI
-*.log
-
-# ==============================
-# Arquivos temporários
-# ==============================
-
-tmp/
-temp/
-
-# Playwright
-/playwright-report/
-/blob-report/
-/playwright/.cache/
-/playwright/.auth/
-
-__*
-
-# AllureReport
-allure*# =========================
-# Node.js
-# =========================
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-package-lock.json
+# Lockfiles for package managers not used by this project
 yarn.lock
 pnpm-lock.yaml
 
-# =========================
-# Ambiente / Configuração
-# =========================
+# Environment
 .env
 .env.*
 !.env.example
 
-# =========================
 # Logs
-# =========================
 logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 *.log
 
-# =========================
-# Build / Output
-# =========================
+# Build output and caches
 dist/
 build/
 out/
 coverage/
+.npm/
+.cache/
+.parcel-cache/
+.temp/
+tmp/
+temp/
 
-# =========================
-# Playwright
-# =========================
-test-results/
-playwright-report/
-blob-report/
-report/
+# Playwright and Allure reports/results
+/test-results/
+/playwright-report/
+/blob-report/
+/allure-results/
+/allure-report/
+/playwright/.cache/
+/playwright/.auth/
+artifacts/
 reports/
+report/
 
-# Screenshots / vídeos de falha
+# Browser artifacts
+*.zip
+*.trace
+*.har
 *.png
 *.webm
 *.mp4
 
-# =========================
-# Cache
-# =========================
-.cache/
-.temp/
-tmp/
-
-# =========================
-# IDE / Editor
-# =========================
+# IDE and operating system
 .vscode/
+!.vscode/extensions.json
 .idea/
 *.swp
 *.swo
+*~
 .DS_Store
-
-# =========================
-# Sistema Operacional
-# =========================
 Thumbs.db
+ehthumbs.db
+Desktop.ini
 
-# =========================
-# Arquivos de teste locais
-# =========================
+# Local files
 *.local
+__*
 
-# Playwright
-/playwright-report/
-/blob-report/
-/playwright/.cache/
-/playwright/.auth/
+allure*

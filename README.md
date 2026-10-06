@@ -61,7 +61,28 @@ Vamos construir algo profissional e impactante! 💪
 ```bash
 git clone git@github.com:JacksonTestLab/app.northwind.git
 cd app-northwind
+npm install
 ```
+
+Configure `BASE_URL`, `USER_EMAIL` e `USER_PASSWORD` no arquivo local `.env` (os nomes usam sublinhado).
+
+## 📊 Relatórios Allure
+
+Os resultados do Allure são gravados em `allure-results/`; o relatório HTML é criado em `allure-report/`. Esses arquivos são locais e ignorados pelo Git.
+
+```bash
+# Executa os testes e inicia uma coleta nova de resultados Allure
+npm run test:allure
+
+# Gera o relatório HTML e abre no navegador
+npm run allure:generate
+npm run allure:open
+
+# Alternativa: gera e serve os resultados diretamente
+npm run allure:serve
+```
+
+Para executar os testes sem limpar os resultados anteriores, use `npm test`. O comando `npm run allure:clean` remove os resultados e relatórios locais existentes.
 
 ## 👨‍💻 Sobre o analista de QA
 

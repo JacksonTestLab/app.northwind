@@ -12,7 +12,7 @@ class CreateProductModal {
 
 
     this.nameInput = page.getByTestId("add-product-name");
-    this.priceInput = page.getByTestId("edit-product-price");
+    this.priceInput = page.getByTestId("add-product-price");
     this.stockInput = page.getByTestId("add-product-stock");
     this.skuInput = page.getByTestId("add-product-sku");
     this.categoryDropdown = page.getByRole("button", {
@@ -24,11 +24,6 @@ class CreateProductModal {
     this.submitButton = page.getByTestId("add-product-submit");
     this.cancelButton = page.getByTestId("add-product-cancel");
 
-    // mensagens de erro exibidas pelo modal
-    this.errorName = page.getByTestId("error-name");
-    this.errorPrice = page.getByTestId("error-price");
-    this.errorStock = page.getByTestId("error-stock");
-    this.errorSku = page.getByTestId("error-sku");
   }
   // métdos de preenchimento
   async open() {
@@ -55,7 +50,24 @@ class CreateProductModal {
 
   async selectCategory(name) {
     await this.categoryDropdown.click();
-    await this.page.getByRole("button", { name }).click();
+    const categoryOption = this.page.getByRole("button", { name, exact: true });
+    await expect(
+      categoryOption,
+      `Categoria "${name}" indisponível no formulário`,
+    ).toBeVisible();
+    await categoryOption.click();
+  }
+
+  async selectFirstAvailableCategory() {
+    await this.categoryDropdown.click();
+    const categoryOption = this.page
+      .locator('[data-testid^="add-product-category-option-"]')
+      .first();
+    await expect(
+      categoryOption,
+      "Nenhuma categoria disponível para cadastro",
+    ).toBeVisible();
+    await categoryOption.click();
   }
 
   async selectSupplier(name) {
@@ -72,20 +84,8 @@ class CreateProductModal {
     await this.cancelButton.click();
   }
 
-  // acessor para os elementos de erro por campo
-  getError(field) {
-    switch (field) {
-      case "name":
-        return this.errorName;
-      case "price":
-        return this.errorPrice;
-      case "stock":
-        return this.errorStock;
-      case "sku":
-        return this.errorSku;
-      default:
-        throw new Error(`Campo de erro desconhecido: ${field}`);
-    }
+  getError(message) {
+    return this.page.getByText(message, { exact: true });
   }
 }
 

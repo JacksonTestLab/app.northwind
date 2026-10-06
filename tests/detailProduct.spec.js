@@ -73,7 +73,7 @@ test.describe("[Gestão de Produtos] Detalhes do Produto", () => {
   // Botões do modal
   // ─────────────────────────────────────────────────────────────
 
-  test("Deve fechar o modal ao clicar em OK entendi", async ({ page }) => {
+  test("Deve fechar o modal pelo botão Fechar", async ({ page }) => {
     const rows = page.locator("table tbody tr");
     await rows.first().getByRole("button", { name: "Detalhes" }).click();
     await expect(detailModal.heading).toBeVisible();
@@ -83,7 +83,9 @@ test.describe("[Gestão de Produtos] Detalhes do Produto", () => {
     await expect(detailModal.heading).toBeHidden();
   });
 
-  test("Deve fechar o modal ao clicar em Cancelar", async ({ page }) => {
+  test("Deve fechar o modal pelo botão de fechar no cabeçalho", async ({
+    page,
+  }) => {
     const rows = page.locator("table tbody tr");
     await rows.first().getByRole("button", { name: "Detalhes" }).click();
     await expect(detailModal.heading).toBeVisible();
@@ -97,7 +99,7 @@ test.describe("[Gestão de Produtos] Detalhes do Produto", () => {
   // Imprimir
   // ─────────────────────────────────────────────────────────────
 
-  test("Deve abrir nova aba ao clicar em Imprimir", async ({ page }) => {
+  test("Deve abrir nova aba ao clicar em Imprimir", async ({ page }, testInfo) => {
     const rows = page.locator("table tbody tr");
     await rows.first().getByRole("button", { name: "Detalhes" }).click();
     await expect(detailModal.heading).toBeVisible();
@@ -110,7 +112,7 @@ test.describe("[Gestão de Produtos] Detalhes do Produto", () => {
     const titulo = await popup.title();
     expect(titulo).toContain("QA Automation Shop");
 
-    await popup.screenshot({ path: "screenshots/print-preview.png" });
+    await popup.screenshot({ path: testInfo.outputPath("print-preview.png") });
     //await popup.close();
   });
 

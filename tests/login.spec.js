@@ -14,7 +14,10 @@ test("CA05 - Deve autenticar com sucesso e redirecionar para dashboard", async (
     await page.getByTestId("email-input").fill(process.env.USER_EMAIL);    
     await page.getByTestId("password-input").fill(process.env.USER_PASSWORD);
     await page.getByTestId("login-button").click();
-    await expect(page.getByRole("heading")).toContainText(DASHBOARD_TITULO);
+    await page.waitForURL("**/products");
+    await expect(
+      page.getByRole("heading", { name: DASHBOARD_TITULO, exact: true }),
+    ).toBeVisible();
     await expect(
       page.getByRole("button", { name:RULLES_BUTTON })).toBeVisible();
   });

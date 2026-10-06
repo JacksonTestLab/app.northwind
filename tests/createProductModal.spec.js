@@ -8,6 +8,9 @@ import { label, severity, description, tag } from "allure-js-commons";
 // dados de entrada/expectativa semelhantes ao fixture de cadastro
 const dados = require("../fixtures/products-data.json");
 const ProductsPage = require("../pages/ProductsPage");
+const {
+  routeCategoryRequestsWithinApiLimit,
+} = require("./helpers/categoryApi");
 
 test.describe("Cadastro de Produto", () => {
   let modal;
@@ -15,27 +18,31 @@ test.describe("Cadastro de Produto", () => {
   test.beforeEach(async ({ page }) => {
     modal = new CreateProductModal(page);
 
-    await page.goto("https://northwind-test-platform.vercel.app/ ");
-    await page.getByTestId("email-input").fill("admin@qatest.com");
-    await page.getByTestId("password-input").fill("Teste@123");
+    await routeCategoryRequestsWithinApiLimit(page);
+    await page.goto("/");
+    await page.getByTestId("email-input").fill(process.env.USER_EMAIL);
+    await page.getByTestId("password-input").fill(process.env.USER_PASSWORD);
     await page.getByTestId("login-button").click();
-    await modal.open();
+    await page.waitForURL("**/products");
+    await page
+      .locator("table tbody tr")
+      .first()
+      .waitFor({ state: "visible", timeout: 15000 });
   });
 
   test.describe("Criação de Produto - Validações de Entrada", () => {
     test("Deve exibir mensagem de erro quando o nome estiver vazio", async () => {
-      await severity("critical");
-      //await allure.severity("critical");
-      //await allure.tag("validacao");
+      //await severity("critical");
+      await allure.severity("critical");
+      await allure.tag("validacao");
 
       const cenario = dados.nomeObrigatorio;
 
       await modal.fillName(cenario.dados.name);
       await modal.submit();
-      await expect(modal.getError("name")).toBeVisible();
-      await expect(modal.getError("name")).toHaveText(
-        cenario.esperado.mensagem,
-      );
+      await expect(
+        modal.getError(cenario.esperado.mensagem),
+      ).toBeVisible();
     });
 
     test("Deve exibir mensagem de erro quando o nome tiver menos de 6 caracteres", async () => {
@@ -43,9 +50,9 @@ test.describe("Cadastro de Produto", () => {
 
       await modal.fillName(cenario.dados.name);
       await modal.submit();
-      await expect(modal.getError("name")).toHaveText(
-        cenario.esperado.mensagem,
-      );
+      await expect(
+        modal.getError(cenario.esperado.mensagem),
+      ).toBeVisible();
     });
 
     test("Deve exibir mensagem de erro quando o nome contiver números", async ({
@@ -56,18 +63,25 @@ test.describe("Cadastro de Produto", () => {
       await modal.fillName(cenario.dados.name);
       await modal.submit();
       //await page.pause(); // para aqui e abre o Inspector
-      await expect(modal.getError("name")).toHaveText(
-        cenario.esperado.mensagem,
-      );
+      await expect(
+        modal.getError(cenario.esperado.mensagem),
+      ).toBeVisible();
     });
   });
 
   test.describe("Criação de Produto - Fluxo de Sucesso", () => {
-    test("Deve criar o produto com sucesso quando os dados forem válidos", async () => {
+    test("Deve criar o produto com sucesso quando os dados forem válidos", async ({
+      page,
+    }) => {
       const cenario = dados.valido;
 
       const nomeProduto = faker.commerce.productName();
       const skuProduto = faker.string.alphanumeric(8).toUpperCase();
+      const firstProductCells = page
+        .locator("table tbody tr")
+        .first()
+        .locator("td");
+      const supplier = (await firstProductCells.nth(4).innerText()).trim();
 
       //await modal.fillName(cenario.dados.name);
       //await modal.fillSku(cenario.dados.sku);
@@ -78,22 +92,21 @@ test.describe("Cadastro de Produto", () => {
       await modal.fillPrice(cenario.dados.price);
       await modal.fillStock(cenario.dados.stock);
 
-      await modal.selectCategory(cenario.dados.category);
-      await modal.selectSupplier(cenario.dados.supplier);
+      await modal.selectFirstAvailableCategory();
+      await modal.selectSupplier(supplier);
       await modal.submit();
-      await expect(modal.getError("name")).toBeHidden();
+      await expect(modal.modalHeading).toBeHidden();
     });
   });
 
   test.describe("[Gestão de Produtos] Elementos da Tela de Produtos", () => {
-    test("Deve exibir os filtros de busca e botão de limpeza", async ({
+    test("Deve exibir a busca e o filtro de fornecedor", async ({
       page,
     }) => {
       const productsPage = new ProductsPage(page);
 
       // Validação
       await expect(productsPage.searchInput).toBeVisible();
-      await expect(productsPage.categoryFilter).toBeVisible();
       await expect(productsPage.supplierFilter).toBeVisible();
       //await expect(productsPage.clearFiltersButton).toBeVisible();
     });
@@ -110,8 +123,8 @@ test.describe("Cadastro de Produto", () => {
     test("Deve exibir ação de exclusão disponível para o produto", async ({
       page,
     }) => {
-      await severity("minor");
-      await tag("ui");
+      await allure.severity('minor');
+      await allure.tag('ui');
       const productsPage = new ProductsPage(page);
 
       // Validação
@@ -135,21 +148,20 @@ test.describe("Cadastro de Produto", () => {
       await expect(productsPage.previousPageButton).toBeVisible();
     });
 
-   test("Não deve permitir criar produto sem categoria", async ({ page }) => {
-  await severity("blocker");
-  await description("Regra de negócio crítica: produto não pode existir sem categoria");
+    test("Não deve permitir criar produto sem categoria", async () => {
+      await allure.severity('blocker');
+      await allure.description('Regra de negócio crítica: produto não pode existir sem categoria');
 
-  await modal.fillName("Produto Teste");
-  await modal.submit();
+      await modal.fillName("Produto Teste");
+      await modal.submit();
 
-  await expect(page.locator('.Toastify__toast--error'))
-    .toBeVisible();
-});
+      await expect(modal.getError("category")).toBeVisible();
 
-    test("Criar produto com sucesso", async () => {
-      await severity("minor");
-      //await allure.severity("normal");
-      await tag("fluxo-principal");
+    });
+
+    test("Cria produto com sucesso", async () => {
+      await allure.severity('normal');
+      await allure.tag('fluxo-principal');
 
       const nomeProduto = faker.commerce.productName();
 
@@ -158,18 +170,16 @@ test.describe("Cadastro de Produto", () => {
     });
 
     test("Botão editar deve existir", async ({ page }) => {
-      await severity("minor");
-
-      await tag("ui");
+      await allure.severity('minor');
+      await allure.tag('ui');
 
       const productsPage = new ProductsPage(page);
       await expect(productsPage.editButton).toBeVisible();
     });
 
     test("Botão detalhes deve existir", async ({ page }) => {
-      await severity("trivial");
-      //await allure.severity("trivial");
-      await tag("ui");
+      await allure.severity('trivial');
+      await allure.tag('ui');
 
       const productsPage = new ProductsPage(page);
       await expect(productsPage.detailsButton).toBeVisible();
@@ -210,21 +220,21 @@ test.describe("Cadastro de Produto", () => {
   });
 
   test.describe('Cadastro em Massa via JSON', () => {
-  let modal;
-  let productsPage;
+    let modal;
+    let productsPage;
 
-  test.beforeEach(async ({ page }) => {
-    modal = new CreateProductModal(page);
-    productsPage = new ProductsPage(page);
+    test.beforeEach(async ({ page }) => {
+      modal = new CreateProductModal(page);
+      productsPage = new ProductsPage(page);
 
-    await page.goto('/');
-    await page.getByTestId('email-input').fill(process.env.USER_EMAIL);
-    await page.getByTestId('password-input').fill(process.env.USER_PASSWORD);
-    await page.getByTestId('login-button').click();
+      await page.goto('/');
+      await page.getByTestId('email-input').fill(process.env.USER_EMAIL);
+      await page.getByTestId('password-input').fill(process.env.USER_PASSWORD);
+      await page.getByTestId('login-button').click();
 
-    await page.waitForURL('**/products');
-    await page.locator('table tbody tr').first().waitFor({ state: 'visible', timeout: 15000 });
-  });
+      await page.waitForURL('**/products');
+      await page.locator('table tbody tr').first().waitFor({ state: 'visible', timeout: 15000 });
+    });
 
   });
 

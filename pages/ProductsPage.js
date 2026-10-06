@@ -9,7 +9,7 @@ class ProductsPage {
 
     this.searchInput = page.getByRole('textbox', { name: 'Digite o nome do produto...' });
     this.categoryFilter = page.getByRole('combobox').first();
-    this.supplierFilter = page.getByRole('combobox').nth(1);
+    this.supplierFilter = page.getByRole('combobox').first();
     this.clearFiltersButton = page.getByRole('button', { name: 'Limpar filtros' });
 
     this.editButton = page.getByRole('button', { name: 'Edit' }).first();
