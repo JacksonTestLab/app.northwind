@@ -49,6 +49,7 @@ report/
 *.png
 *.webm
 *.mp4
+!/evidencias-e-anexos/*.png
 
 # IDE and operating system
 .vscode/
