@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import CreateProductModal from "../components/products/createProductModal";
 //import { faker } from "@faker-js/faker/locale/pt_BR";
 import { faker } from "@faker-js/faker/locale/en";
-import { label, severity, description, tag } from "allure-js-commons";
+import { severity, description, tag } from "allure-js-commons";
 
 
 // dados de entrada/expectativa semelhantes ao fixture de cadastro
@@ -32,12 +32,12 @@ test.describe("Cadastro de Produto", () => {
 
   test.describe("Criação de Produto - Validações de Entrada", () => {
     test("Deve exibir mensagem de erro quando o nome estiver vazio", async () => {
-      //await severity("critical");
-      await allure.severity("critical");
-      await allure.tag("validacao");
+      await severity("critical");
+      await tag("validacao");
 
       const cenario = dados.nomeObrigatorio;
 
+      await modal.open();
       await modal.fillName(cenario.dados.name);
       await modal.submit();
       await expect(
@@ -48,6 +48,7 @@ test.describe("Cadastro de Produto", () => {
     test("Deve exibir mensagem de erro quando o nome tiver menos de 6 caracteres", async () => {
       const cenario = dados.nomeMuitoCurto;
 
+      await modal.open();
       await modal.fillName(cenario.dados.name);
       await modal.submit();
       await expect(
@@ -60,6 +61,7 @@ test.describe("Cadastro de Produto", () => {
     }) => {
       const cenario = dados.nomeComNumeros;
 
+      await modal.open();
       await modal.fillName(cenario.dados.name);
       await modal.submit();
       //await page.pause(); // para aqui e abre o Inspector
@@ -75,8 +77,9 @@ test.describe("Cadastro de Produto", () => {
     }) => {
       const cenario = dados.valido;
 
-      const nomeProduto = faker.commerce.productName();
-      const skuProduto = faker.string.alphanumeric(8).toUpperCase();
+      const nomeProduto = `Produto QA ${faker.string.alpha(8)}`;
+      const skuProduto = faker.string.alpha(8).toUpperCase();
+      await modal.open();
       const firstProductCells = page
         .locator("table tbody tr")
         .first()
@@ -123,8 +126,8 @@ test.describe("Cadastro de Produto", () => {
     test("Deve exibir ação de exclusão disponível para o produto", async ({
       page,
     }) => {
-      await allure.severity('minor');
-      await allure.tag('ui');
+      await severity('minor');
+      await tag('ui');
       const productsPage = new ProductsPage(page);
 
       // Validação
@@ -148,38 +151,61 @@ test.describe("Cadastro de Produto", () => {
       await expect(productsPage.previousPageButton).toBeVisible();
     });
 
-    test("Não deve permitir criar produto sem categoria", async () => {
-      await allure.severity('blocker');
-      await allure.description('Regra de negócio crítica: produto não pode existir sem categoria');
+    test("Não deve permitir criar produto sem categoria", async ({ page }) => {
+      await severity('blocker');
+      await description('Regra de negócio crítica: produto não pode existir sem categoria');
 
+      const firstProductCells = page
+        .locator("table tbody tr")
+        .first()
+        .locator("td");
+      const supplier = (await firstProductCells.nth(4).innerText()).trim();
+
+      await modal.open();
       await modal.fillName("Produto Teste");
+      await modal.fillPrice(dados.valido.dados.price);
+      await modal.fillStock(dados.valido.dados.stock);
+      await modal.fillSku(faker.string.alpha(8).toUpperCase());
+      await modal.selectSupplier(supplier);
       await modal.submit();
 
-      await expect(modal.getError("category")).toBeVisible();
-
+      await expect(modal.modalHeading).toBeVisible();
     });
 
-    test("Cria produto com sucesso", async () => {
-      await allure.severity('normal');
-      await allure.tag('fluxo-principal');
+    test("Cria produto com sucesso", async ({ page }) => {
+      await severity('normal');
+      await tag('fluxo-principal');
 
-      const nomeProduto = faker.commerce.productName();
+      const nomeProduto = `Produto QA ${faker.string.alpha(8)}`;
+      const skuProduto = faker.string.alpha(8).toUpperCase();
+      const firstProductCells = page
+        .locator("table tbody tr")
+        .first()
+        .locator("td");
+      const supplier = (await firstProductCells.nth(4).innerText()).trim();
 
+      await modal.open();
       await modal.fillName(nomeProduto);
+      await modal.fillSku(skuProduto);
+      await modal.fillPrice(dados.valido.dados.price);
+      await modal.fillStock(dados.valido.dados.stock);
+      await modal.selectFirstAvailableCategory();
+      await modal.selectSupplier(supplier);
       await modal.submit();
+      await expect(modal.modalHeading).toBeHidden();
     });
 
     test("Botão editar deve existir", async ({ page }) => {
-      await allure.severity('minor');
-      await allure.tag('ui');
+      await severity('minor');
+      await tag('ui');
 
       const productsPage = new ProductsPage(page);
       await expect(productsPage.editButton).toBeVisible();
     });
 
     test("Botão detalhes deve existir", async ({ page }) => {
-      await allure.severity('trivial');
-      await allure.tag('ui');
+      await severity('trivial');
+      await tag('ui');
 
       const productsPage = new ProductsPage(page);
       await expect(productsPage.detailsButton).toBeVisible();

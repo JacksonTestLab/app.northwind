@@ -15,25 +15,31 @@ test.describe('[Gestao de Produtos] Busca Dinamica', () => {
   });
 
   test('Deve filtrar produtos pelo termo buscado', async ({ page }) => {
-    const termo = 'RGB';
     const rows = page.locator('table tbody tr');
+    const nomeProduto = (await rows.first().locator('td').nth(1).textContent()).trim();
 
-    // conta antes de filtrar — tabela ja tem linhas
-    const totalAntes = await rows.count();
+    await productsPage.searchInput.fill(nomeProduto);
 
-    await productsPage.searchInput.fill(termo);
+    await expect(rows.first().locator('td').nth(1)).toHaveText(nomeProduto, {
+      timeout: 10000,
+    });
 
-    // aguarda a tabela mudar de tamanho
-    await expect(rows).not.toHaveCount(totalAntes, { timeout: 10000 });
-
-    const count = await rows.count();
-    expect(count).toBeGreaterThan(0);
-
-    // valida linha a linha que todos contem o termo
-    for (let i = 0; i < count; i++) {
-      const nomeProduto = await rows.nth(i).locator('td').nth(1).textContent();
-      expect(nomeProduto.toLowerCase()).toContain(termo.toLowerCase());
-    }
+    await expect
+      .poll(
+        async () => {
+          const nomesFiltrados = await rows
+            .locator('td:nth-child(2)')
+            .allTextContents();
+          return (
+            nomesFiltrados.length > 0 &&
+            nomesFiltrados.every(nome =>
+              nome.toLowerCase().includes(nomeProduto.toLowerCase()),
+            )
+          );
+        },
+        { timeout: 10000 },
+      )
+      .toBe(true);
   });
 
   test('Deve exibir lista vazia quando nenhum produto for encontrado', async ({ page }) => {

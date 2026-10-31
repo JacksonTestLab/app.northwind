@@ -6,6 +6,9 @@ import EditProductModal from "../components/products/editProductModal";
 
 const ProductsPage = require("../pages/ProductsPage");
 const dados = require("../fixtures/products-data.json");
+const {
+  routeCategoryRequestsWithinApiLimit,
+} = require("./helpers/categoryApi");
 
 test.describe("[Gestão de Produtos] Edição de Produtos", () => {
   let productsPage;
@@ -16,6 +19,7 @@ test.describe("[Gestão de Produtos] Edição de Produtos", () => {
 
     modal = new EditProductModal(page);
 
+    await routeCategoryRequestsWithinApiLimit(page);
     await page.goto("/");
     await page.getByTestId("email-input").fill(process.env.USER_EMAIL);
     await page.getByTestId("password-input").fill(process.env.USER_PASSWORD);
@@ -50,8 +54,8 @@ Validações de campos obrigatórios no modal de edição
       await modal.fillName(cenario.dados.name);
       await modal.save();
 
-      await expect(modal.getError("name")).toBeVisible();
-      await expect(modal.getError("name")).toHaveText(
+      await expect(modal.getError(cenario.esperado.mensagem)).toBeVisible();
+      await expect(modal.getError(cenario.esperado.mensagem)).toHaveText(
         cenario.esperado.mensagem,
       );
     });
@@ -62,8 +66,8 @@ Validações de campos obrigatórios no modal de edição
       await modal.fillName(cenario.dados.name);
       await modal.save();
 
-      await expect(modal.getError("name")).toBeVisible();
-      await expect(modal.getError("name")).toHaveText(
+      await expect(modal.getError(cenario.esperado.mensagem)).toBeVisible();
+      await expect(modal.getError(cenario.esperado.mensagem)).toHaveText(
         cenario.esperado.mensagem,
       );
     });
@@ -74,8 +78,8 @@ Validações de campos obrigatórios no modal de edição
       await modal.fillName(cenario.dados.name);
       await modal.save();
 
-      await expect(modal.getError("name")).toBeVisible();
-      await expect(modal.getError("name")).toHaveText(
+      await expect(modal.getError(cenario.esperado.mensagem)).toBeVisible();
+      await expect(modal.getError(cenario.esperado.mensagem)).toHaveText(
         cenario.esperado.mensagem,
       );
     });
@@ -164,8 +168,13 @@ Fluxo de sucesso — editar produto já existente
     //await createModal.fillSku(cenario.preCondicao.sku);
     await createModal.fillSku(skuProduto);
 
-    await createModal.selectCategory(cenario.preCondicao.category);
-    await createModal.selectSupplier(cenario.preCondicao.supplier);
+    await createModal.selectFirstAvailableCategory();
+    const firstProductCells = page
+      .locator("table tbody tr")
+      .first()
+      .locator("td");
+    const supplier = (await firstProductCells.nth(4).innerText()).trim();
+    await createModal.selectSupplier(supplier);
 
     await createModal.submit();
 

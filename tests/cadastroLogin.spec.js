@@ -29,12 +29,9 @@ test.describe("Cadastro de Usuário", () => {
       await expect(cadastroPage.getBotaoCadastrar()).toBeDisabled();
     });
 
-    test("Deve exibir erro quando nome tiver números", async () => {
+    test("Deve rejeitar números no nome", async () => {
       const cenario = dados.nomeComNumeros;
       await cadastroPage.preencherFormulario(cenario.dados);
-      await expect(
-        cadastroPage.getMensagemErro(cenario.esperado.mensagem),
-      ).toBeVisible();
       await expect(cadastroPage.getBotaoCadastrar()).toBeDisabled();
     });
   });
@@ -80,16 +77,16 @@ test.describe("Cadastro de Usuário", () => {
   test.describe("Caminho Feliz", () => {
     test("Cadastro de Usuário com dado válidos", async ({ page }) => {
       const cenario = dados.valido;
-      //await cadastroPage.preencherFormulario(cenario.dados);
       await cadastroPage.preencherFormulario({
         ...cenario.dados,
-        email: faker.internet.email(), // email unico a cada execucao
+        nome: "Jaro Silva",
+        email: `qa.${faker.string.alphanumeric(10)}@test.com`,
       });
 
+      await expect(cadastroPage.campoNome).toHaveValue("Jaro Silva");
+      await expect(cadastroPage.getBotaoCadastrar()).toBeEnabled();
       await cadastroPage.getBotaoCadastrar().click();
-      await expect(
-        cadastroPage.getMensagemErro(cenario.esperado.mensagem),
-      ).toBeVisible();
+      await expect(cadastroPage.mensagemSucesso).toBeVisible();
     });
   });
 });

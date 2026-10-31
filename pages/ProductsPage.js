@@ -8,8 +8,8 @@ class ProductsPage {
     this.toastAddProduct = page.getByText('Produto adicionado com sucesso!');
 
     this.searchInput = page.getByRole('textbox', { name: 'Digite o nome do produto...' });
-    this.categoryFilter = page.getByRole('combobox').first();
-    this.supplierFilter = page.getByRole('combobox').first();
+    this.categoryFilter = page.getByTestId('category-filter-select');
+    this.supplierFilter = page.getByTestId('supplier-filter-select');
     this.clearFiltersButton = page.getByRole('button', { name: 'Limpar filtros' });
 
     this.editButton = page.getByRole('button', { name: 'Edit' }).first();
