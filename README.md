@@ -1,11 +1,16 @@
-# 🚀 app-northwind: Automação E2E Profissional com Playwright
+<div align="center">
 
-![Status](https://img.shields.io/badge/Status-Em%20Desenvolvimento-yellow?style=flat-square)
-![Playwright](https://img.shields.io/badge/Playwright-2.0-%231F1F1F.svg?style=flat-square&logo=playwright&logoColor=white)
-![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
-![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=node.js&logoColor=white)
-![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-2088FF?style=flat-square&logo=github-actions&logoColor=white)
-![Git](https://img.shields.io/badge/Git-F05032?style=flat-square&logo=git&logoColor=white)
+
+
+# 🎭 app-northwind
+### Projeto de Automação de Testes E2E com Playwright
+
+[![Playwright Tests](https://github.com/cursosgotasdetecnologia/app-northwind/actions/workflows/playwright.yml/badge.svg)](https://github.com/cursosgotasdetecnologia/app-northwind/actions/workflows/playwright.yml)
+![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?style=flat&logo=javascript&logoColor=black)
+![Playwright](https://img.shields.io/badge/Playwright-1.x-45ba4b?style=flat&logo=playwright&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-20.x-339933?style=flat&logo=node.js&logoColor=white)
+![CI/CD](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-2088FF?style=flat&logo=githubactions&logoColor=white)
+
 
 > **Automação de testes End-to-End completa e escalável em uma aplicação real (Northwind).**  
 > Projeto de estudo profissional focado em entregar qualidade, velocidade e confiabilidade utilizando as melhores práticas do mercado.
@@ -40,19 +45,59 @@ Vamos construir algo profissional e impactante! 💪
 | **GitHub (SSH)**    | Hospedagem do repositório com autenticação segura via chave SSH |
 | **GitHub Actions**  | CI/CD completo (execução paralela, relatórios e notificação) |
 
-## ✅ Checklist de Progresso
+## 🏗️ Arquitetura do Projeto
 
-- [x] Repositório criado no GitHub com SSH
-- [x] Ambiente Node.js configurado
-- [x] Playwright instalado e inicializado
-- [x] Git inicializado com `.gitignore` otimizado
-- [x] Playwright config base criado
-- [ ] Primeiros testes E2E implementados
-- [ ] Page Object Model (POM) estruturado
-- [ ] Pipeline de CI/CD no GitHub Actions
-- [ ] Relatórios HTML + Allure integrados
-- [ ] Testes de API validados
-- [ ] Execução paralela e cross-browser configurada
+```
+app-northwind/
+├── .github/
+│   └── workflows/
+│       └── playwright.yml        # Pipeline CI/CD
+├── components/
+│   └── products/
+│       ├── createProductModal.js
+│       ├── EditProductModal.js
+│       ├── DeleteConfirmationDialog.js
+│       ├── ProductDetailModal.js
+├── fixtures/
+│   ├── products-data.json        # Dados de cadastro e validação
+│   ├── products-mass.json        # Massa JSON para loop
+│   ├── combo-fornecedores.json   # Lista esperada de fornecedores
+│   ├── combo-categorias.json     # Lista esperada de categorias
+│   └── csv/
+│       └── products-mass.csv    # Massa CSV
+├── pages/
+│   ├── ProductsPage.js
+│   ├── LoginPage.js
+│   └── CadastroPage.js
+├── tests/
+│   ├── createProductModal.spec.js
+│   ├── editProductModal.spec.js
+│   ├── deleteProduct.spec.js
+│   ├── detailProduct.spec.js
+│   ├── combos.spec.js
+│   ├── busca.spec.js
+│   └── reset-filtros.spec.js
+└── playwright.config.ts
+```
+---
+
+## ✅ Checklist de Implementação
+
+- [x] Page Object Model — locators e ações encapsulados por responsabilidade
+- [x] CRUD completo automatizado — cadastro, edição, exclusão e detalhes
+- [x] Validação de campos obrigatórios e mensagens de erro
+- [x] Validação de combos — fornecedores e categorias (existência + contagem exata)
+- [x] Busca dinâmica — validação linha a linha dos resultados
+- [x] Reset de filtros — validação de estado antes e depois
+- [x] Data Driven Testing com JSON e CSV
+- [x] Massa de dados dinâmica com Faker.js
+- [x] Evidências automáticas — screenshots e vídeos em falhas
+- [x] Trace Viewer — investigação de falhas com timeline
+- [x] Allure Report — relatórios com severity, epic e feature
+- [x] CI/CD com GitHub Actions — pipeline automático a cada push e PR
+- [x] Playwright Report como artifact no GitHub Actions
+
+---
 
 ## 📥 Instalação
 
